@@ -67,4 +67,42 @@ class OrderController extends Controller
         }
     }
     //create data end
+
+    //update data start
+    public function update($id, Request $request){
+        $validator = Validator::make($request->all(),
+        [
+            'cust_id' => 'required',
+            'officer_id' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return Response() -> json($validator->errors());
+        }
+
+        $update = DB::table('order')
+        ->where('transaction_id', '=', $id)
+        ->update(
+            [
+                'cust_id' => $request->cust_id,
+                'officer_id' => $request->officer_id,
+                'date' => date("Y-m-d")
+            ]
+        );
+
+        $data = Order::where('transaction_id', '=', $id)->get();
+        if($update){
+            return Response() -> json([
+                'status' => 1,
+                'message' => 'Success updating data!',
+                'data' => $data  
+            ]);
+        } else {
+            return Response() -> json([
+                'status' => 0,
+                'message' => 'Failed updating data!'
+            ]);
+        }
+    }
+    //update data end
 }

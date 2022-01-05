@@ -62,9 +62,54 @@ class CustomersController extends Controller
                 'data' => $data   
             ]);
         }else {
-            return Response() -> json(['status' => 0]);
+            return Response() -> json([
+                'status' => 0,
+                'message' => 'Failed adding new data!'
+            ]);
         }
+    }
         //create data end
 
-    }
+        //update data start
+        public function update($id, Request $request){
+            $validator=Validator::make($request->all(), [
+                'name' => 'required',
+                'address' => 'required',
+                'no' => 'required',
+                'usn' => 'required',
+                'pass' => 'required'
+            ]);
+    
+            if($validator->fails()) {
+                return Response()->json($validator->errors());
+            }
+    
+            $ubah = DB::table('customers')
+            ->where('cust_id', '=', $id)
+            ->update(
+                [
+                    'name' => $request->name,
+                    'address' => $request->address,
+                    'no' => $request->no,
+                    'usn' => $request->usn,
+                    'pass' => $request->pass
+                ]
+            );
+            
+            $data = Customers::where('cust_id', '=', $id)->get();
+            if($ubah){
+                return Response() ->json([
+                    'status' => 1,
+                    'message' => 'Success updating data!',
+                    'data' => $data  
+                ]);
+            } else {
+                return Response() -> jsnon([
+                    'status' => 0,
+                    'message' => 'Failed updating data!'
+                ]);
+            }
+        }
+        //update data end
+    
 }

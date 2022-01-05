@@ -76,4 +76,52 @@ class OrderDetailController extends Controller
         }
     }
     //create data end
+
+    //update data start
+    public function update($id, Request $request){
+        $validator = Validator::make($request->all(),
+        [
+            'transaction_id' => 'required',
+            'product_id' => 'required',
+            'qty' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return Response() -> json($validator->errors());
+        }
+
+        //count subtotal
+        $product_id = $request->product_id;
+        $qty = $request->qty;
+        $price = DB::table('product')
+        ->where('product_id', '=', $product_id)
+        ->value('price');
+        $subtotal = $price * $qty;
+
+        $update = DB::table('order_detail')
+        -> where('detail_transaction_id', '=', $id)
+        ->update(
+            [
+                'transaction_id' => $request->transaction_id,
+                'product_id' => $request->product_id,
+                'qty' =>  $request->qty,
+                'subtotal' => $subtotal
+            ]
+        );
+
+        $data = OrderDetail::where('detail_transaction_id', '=', $id)->get();
+        if($update){
+            return Response() -> json([
+                'status' => 1,
+                'message' => 'Success updating data!',
+                'data' => $data  
+            ]);
+        } else {
+            return Response() -> json([
+                'status' => 0,
+                'message' => 'Failed updating data!'
+            ]);
+        }
+    }
+    //update data end
 }

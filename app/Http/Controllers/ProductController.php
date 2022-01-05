@@ -64,6 +64,46 @@ class ProductController extends Controller
             return Response() -> json(['status' => 0]);
         }
     }
-
     //create data end
+
+    //update data start
+    public function update($id, Request $request){
+        $validator = Validator::make($request->all(),
+        [
+            'name' => 'required',
+            'description'  => 'required',
+            'price'  => 'required',
+            'photo'  => 'required'
+        ]);
+
+        if($validator->fails()){
+            return Response() -> json($validator->errors());
+        }
+        
+        $update = DB::table('product')
+        ->where('product_id', '=', $id)
+        ->update(
+            [
+                'name' => $request->name,
+                'description' => $request->description,
+                'price' => $request->price,
+                'photo' => $request->photo
+            ]
+        );
+
+        $data = Product::where('product_id', '=', $id)->get();
+        if($update){
+            return Response() -> json([
+                'status' => 1,
+                'message' => 'Success updating data!',
+                'data' => $data  
+            ]);
+        } else {
+            return Response() -> json([
+                'status' => 0,
+                'message' => 'Failed updating data!'
+            ]);
+        }
+    }
+    //update data end
 }

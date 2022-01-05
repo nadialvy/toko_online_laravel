@@ -39,3 +39,19 @@ Route::get('/Order/{id}', 'OrderController@detail');
 
 Route::get('/OrderDetail', 'OrderDetailController@show');
 Route::get('/OrderDetail/{id}', 'OrderDetailController@detail');
+
+//put start
+Route::put('/Customers/{id}', 'CustomersController@update');
+
+Route::put('/Officer/{id}', 'OfficerController@update');
+
+Route::put('/Product/{id}', 'ProductController@update');
+
+Route::put('/Order/{id}', 'OrderController@update');
+
+Route::put('/Order/{id}', 'OrderController@update');
+
+Route::put('/OrderDetail/{id}', 'OrderDetailController@update');
+
+
+

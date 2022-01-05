@@ -63,4 +63,48 @@ class OfficerController extends Controller
         }
     }
     //create data end
+
+    //update data start
+    public function update($id, Request $request){
+        $validator = Validator::make($request->all(),
+            [
+                'name' => 'required',
+                'usn' => 'required',
+                'pass' => 'required',
+                'level' => 'required'
+            ]
+        );
+
+        if($validator->fails()){
+            return Response() -> json($validator->errors());
+        }
+
+        $update = DB::table('officer')
+        ->where('officer_id', '=', $id)
+        ->update(
+            [
+                'name' => $request->name,
+                'usn' => $request->usn,
+                'pass' => $request->pass,
+                'level' => $request->level
+            ]
+        );
+
+        $data = Officer::where('officer_id', '=', $id)->get();
+        if($update){
+            return Response() -> json([
+                    'status' => 1,
+                    'message' => 'Success updating data!',
+                    'data' => $data  
+            ]);
+        } else 
+        {
+            return Response() -> json([
+                    'status' => 0,
+                    'message' => 'Failed updating data!'
+            ]);
+        }
+
+    }
+    //update data end
 }
