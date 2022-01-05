@@ -9,6 +9,34 @@ use Illuminate\Support\Facades\DB;
 
 class OrderDetailController extends Controller
 {
+    //read data start
+    public function show(){
+        $data = DB::table('order_detail')
+        ->join('order', 'order_detail.transaction_id', '=', 'order.transaction_id')
+        ->join('product', 'order_detail.product_id', '=', 'product.product_id')
+        ->select('order_detail.detail_transaction_id', 'order.transaction_id', 'product.product_id', 'order_detail.qty', 'order_detail.subtotal')
+        ->get();
+
+        return Response() -> json($data);
+    }
+
+    public function detail($id){
+        if(OrderDetail::where('detail_transaction_id', $id) -> exist()){
+            $detail_orderDetail = DB::table('order_detail')
+            ->join('order', 'order_detail.transaction_id', '=', 'order.transaction_id')
+            ->join('product', 'order_detail.product_id', '=', 'product.product_id')
+            ->select('order_detail.detail_transaction_id', 'order.transaction_id', 'product.product_id', 'order_detail.qty', 'order_detail.subtotal')
+            ->where('detail_transaction_id', '=', $id)
+            ->get();
+
+            return Response() -> json($detail_orderDetail);
+        } else 
+        {
+            return Response() -> json(['message' => 'Could not find data']);
+        }
+    }
+    //read data end
+    
     //create data start
     public function store (Request $request)
     {

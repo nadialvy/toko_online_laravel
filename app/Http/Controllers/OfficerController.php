@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\DB;
 
 class OfficerController extends Controller
 {
+    //read data start
+    public function show()
+    {
+        return Officer::all();
+    }
+    //read data end
+
     //create data start
     public function store(Request $request){
         $validator = Validator::make($request->all(), 

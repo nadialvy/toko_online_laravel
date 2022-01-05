@@ -9,6 +9,26 @@ use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
+    //read data start
+    public function show()
+    {
+        return Product::all();
+    } 
+
+    public function detail($id)
+    {   
+        if(Product::where('product_id', $id)->exists()){
+            $detail_product = DB::table('product')
+            ->where('product.product_id', '=', $id)
+            ->get();
+
+            return Response()->json($detail_product);
+        } else {
+            return Response() ->json(['message' => 'Could not find data']);
+        }
+    }
+    //read data end
+
     //create data start
     public function store (Request $request)
     {

@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\DB;
 
 class CustomersController extends Controller
 {
+    //read data start
+    public function show()
+    {
+        return Customers::all();
+    }
+    //read data end
+
     //create data start
     public function store(Request $request)
     {
