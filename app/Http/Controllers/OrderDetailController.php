@@ -21,18 +21,16 @@ class OrderDetailController extends Controller
     }
 
     public function detail($id){
-        if(OrderDetail::where('detail_transaction_id', $id) -> exist()){
-            $detail_orderDetail = DB::table('order_detail')
-            ->join('order', 'order_detail.transaction_id', '=', 'order.transaction_id')
-            ->join('product', 'order_detail.product_id', '=', 'product.product_id')
-            ->select('order_detail.detail_transaction_id', 'order.transaction_id', 'product.product_id', 'order_detail.qty', 'order_detail.subtotal')
-            ->where('detail_transaction_id', '=', $id)
+        if(OrderDetail::where('detail_transaction_id', $id)->exists()){
+            $data_order = DB::table('order_detail')
+            ->join('order', 'order_detail.transaction_id', '=' , 'order.transaction_id')
+            ->join('product', 'order_detail.product_id', '=' , 'product.product_id')
+            ->select('order.transaction_id', 'order.date', 'order.cust_id', 'product.product_id', 'product.name', 'order_detail.qty', 'order_detail.subtotal')
+            ->where('order_detail.detail_transaction_id', '=', $id)
             ->get();
-
-            return Response() -> json($detail_orderDetail);
-        } else 
-        {
-            return Response() -> json(['message' => 'Could not find data']);
+            return Response()->json($data_order);
+        }else{
+            return Response()->json(['message' => 'Tidak Ditemukan']);
         }
     }
     //read data end
@@ -69,7 +67,10 @@ class OrderDetailController extends Controller
         ]);
 
         if($simpan){
-            return Response() -> json(['status' => 1]);
+            return Response() -> json([
+                'status' => 1,
+                'message' => 'Success adding new data!'
+            ]);
         } else {
             return Response() -> json(['status' => 0]);
         }

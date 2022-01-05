@@ -53,8 +53,13 @@ class ProductController extends Controller
             'photo' => $request->photo
         ]);
 
+        $data = Product::where('name', '=', $request->name)->get();
         if($simpan){
-            return Response() -> json(['status' => 1]);
+            return Response() -> json([
+                'status' => 1,
+                'message' => 'Success adding new data!',
+                'data' => $data   
+            ]);
         } else {
             return Response() -> json(['status' => 0]);
         }

@@ -14,6 +14,18 @@ class CustomersController extends Controller
     {
         return Customers::all();
     }
+
+    public function detail($id){
+        if(Customers::where('cust_id', $id)->exists()){
+            $detail_cust = DB::table('customers')
+            ->select('customers.cust_id', 'customers.name', 'customers.address', 'customers.no', 'customers.usn', 'customers.pass')
+            ->where('cust_id', '=', $id)
+            ->get();
+            return Response()->json($detail_cust);
+        }else{
+            return Response()->json(['message' => 'Could not find data']);
+        }
+    }
     //read data end
 
     //create data start
@@ -42,8 +54,13 @@ class CustomersController extends Controller
             'pass' => $request->pass
         ]);
 
+        $data = Customers::where('name', '=', $request->name) -> get();
         if($simpan){
-            return Response() -> json(['status' => 1]);
+            return Response() -> json([
+                'status' => 1,
+                'message' => 'Success adding new data!',
+                'data' => $data   
+            ]);
         }else {
             return Response() -> json(['status' => 0]);
         }

@@ -14,6 +14,18 @@ class OfficerController extends Controller
     {
         return Officer::all();
     }
+
+    public function detail($id){
+        if(Officer::where('officer_id', $id) -> exists()){
+            $data_order = DB::table('officer')
+            ->select('officer.officer_id', 'officer.name', 'officer.usn', 'officer.pass', 'officer.level')
+            ->where('officer_id', '=', $id)
+            ->get();
+            return Response()->json($data_order);
+        }else{
+            return Response()->json(['message' => 'Could not find data']);
+        }
+    }
     //read data end
 
     //create data start
@@ -39,8 +51,13 @@ class OfficerController extends Controller
             'level' => $request->level
         ]);
 
+        $data = Officer::where('name', '=', $request->name) -> get();
         if($simpan){
-            return Response() -> json(['status' => 1]);
+            return Response() -> json([
+                'status' => 1,
+                'message' => 'Success adding new data!',
+                'data' => $data   
+            ]);
         } else {
             return Response() -> json(['status' => 0]);
         }
