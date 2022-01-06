@@ -106,4 +106,24 @@ class ProductController extends Controller
         }
     }
     //update data end
+
+    //delete data start
+    public function delete($id){
+        $delete = DB::table('product')
+        ->where('product_id', '=', $id)
+        ->delete();
+
+        if($delete){
+            return Response() -> json([
+                'status' => 1,
+                'message' => 'Succes delete data!'
+        ]);
+        } else {
+            return Response() -> json([
+                'status' => 0,
+                'message' => 'Failed delete data!'
+        ]);
+        }
+    }
+    //delete data end
 }

@@ -53,5 +53,15 @@ Route::put('/Order/{id}', 'OrderController@update');
 
 Route::put('/OrderDetail/{id}', 'OrderDetailController@update');
 
+//delete start
+Route::delete('/Customers/{id}', 'CustomersController@delete');
+Route::delete('/Officer/{id}', 'OfficerController@delete');
+Route::delete('/Product/{id}', 'ProductController@delete');
+Route::delete('/Order/{id}', 'OrderController@delete');
+Route::delete('/OrderDetail/{id}', 'OrderDetailController@delete');
+
+
+
+
 
 

@@ -68,9 +68,9 @@ class CustomersController extends Controller
             ]);
         }
     }
-        //create data end
+    //create data end
 
-        //update data start
+    //update data start
         public function update($id, Request $request){
             $validator=Validator::make($request->all(), [
                 'name' => 'required',
@@ -110,6 +110,25 @@ class CustomersController extends Controller
                 ]);
             }
         }
-        //update data end
+    //update data end
     
+    //delete data start
+    public function delete($id){
+        $delete = DB::table('customers')
+        -> where('cust_id', '=', $id)
+        -> delete();
+        
+        if($delete){
+            return Response() -> json([
+                'status' => 1,
+                'message' => 'Succes delete data!'
+        ]);
+        } else {
+            return Response() -> json([
+                'status' => 0,
+                'message' => 'Failed delete data!'
+        ]);
+        }
+    }
+    //delete data end
 }
