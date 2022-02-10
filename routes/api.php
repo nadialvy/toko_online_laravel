@@ -24,12 +24,36 @@ Route::post('/register', 'UserController@register');
 Route::post('/login', 'UserController@login');
 
 Route::group(['middleware' => ['jwt.verify']], function(){
-    //post start
-    Route::post('/Customers', 'CustomersController@store');
-    Route::post('/Officer', 'OfficerController@store');
-    Route::post('/Product', 'ProductController@store');
-    Route::post('/Order', 'OrderController@store');
-    Route::post('/OrderDetail', 'OrderDetailController@store');
+
+    Route::group(['middleware' => ['api.superadmin']], function(){
+        Route::delete('/Customers/{id}', 'CustomersController@delete');
+        Route::delete('/Product/{id}', 'ProductController@delete');
+        Route::delete('/Order/{id}', 'OrderController@delete');  
+        Route::delete('/Officer/{id}', 'OfficerController@delete');
+        Route::delete('/OrderDetail/{id}', 'OrderDetailController@delete');
+
+  
+    });
+
+    Route::group(['middleware' => ['api.admin']], function(){
+        Route::post('/Customers', 'CustomersController@store');
+        Route::put('/Customers/{id}', 'CustomersController@update');
+
+        Route::post('/Product', 'ProductController@store');
+        Route::put('/Product/{id}', 'ProductController@update');
+
+        Route::post('/Order', 'OrderController@store');
+        Route::put('/Order/{id}', 'OrderController@update');
+    
+        Route::post('/Officer', 'OfficerController@store');
+        Route::put('/Officer/{id}', 'OfficerController@update');
+
+        Route::post('/OrderDetail', 'OrderDetailController@store');
+        Route::put('/OrderDetail/{id}', 'OrderDetailController@update');
+
+
+    });
+    
 
     //get start
     Route::get('/Customers', 'CustomersController@show');
@@ -46,26 +70,6 @@ Route::group(['middleware' => ['jwt.verify']], function(){
 
     Route::get('/OrderDetail', 'OrderDetailController@show');
     Route::get('/OrderDetail/{id}', 'OrderDetailController@detail');
-
-    //put start
-    Route::put('/Customers/{id}', 'CustomersController@update');
-
-    Route::put('/Officer/{id}', 'OfficerController@update');
-
-    Route::put('/Product/{id}', 'ProductController@update');
-
-    Route::put('/Order/{id}', 'OrderController@update');
-
-    Route::put('/Order/{id}', 'OrderController@update');
-
-    Route::put('/OrderDetail/{id}', 'OrderDetailController@update');
-
-    //delete start
-    Route::delete('/Customers/{id}', 'CustomersController@delete');
-    Route::delete('/Officer/{id}', 'OfficerController@delete');
-    Route::delete('/Product/{id}', 'ProductController@delete');
-    Route::delete('/Order/{id}', 'OrderController@delete');
-    Route::delete('/OrderDetail/{id}', 'OrderDetailController@delete');
 
 
 });

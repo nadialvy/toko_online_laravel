@@ -43,6 +43,7 @@ class UserController extends Controller
                                                                     //ketika validator, sebelum insert data, akan dicek apakah email nya sudah ada di tabel user
                                                                     //jadi tidak boleh ada email yang samma
             'password' => 'required|string|min:6|confirmed', //confirmed artinya harus ada password confirmation
+            'type' => 'required|integer'
         ]);
 
         if($validator->fails()){
@@ -54,6 +55,7 @@ class UserController extends Controller
                 'name' => $request->get('name'),
                 'email' => $request->get('email'),
                 'password' => Hash::make($request->get('password')),
+                'type' => $request->type
             ]
         );
 
